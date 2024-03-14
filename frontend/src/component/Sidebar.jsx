@@ -11,7 +11,7 @@ import {
   loadinguseratom,
 } from "../atoms/Sidebar";
 import toast from "react-hot-toast";
-import { UserSkeleton } from "./UserSkeleton";
+import { UserSkeleton } from "../Skeletons/UserSkeleton";
 import { useAuthContext } from "../Context/Authuser";
 import { useSocketContext } from "../Context/SocketContext";
 
@@ -38,7 +38,7 @@ export function Usercontainer() {
   useEffect(() => {
     async function fetchdata() {
       setloading(false)
-      const response = await axios.get(
+     try { const response = await axios.get(
         `http://localhost:3000/api/v1/allusers?name=${debouncedvalue}`,
         {
           headers: {
@@ -51,6 +51,10 @@ export function Usercontainer() {
      
       setallusers(response.data.user);
     }
+    catch(error){
+      console.log(error)
+    }
+  }
     fetchdata();
   }, [debouncedvalue]);
 

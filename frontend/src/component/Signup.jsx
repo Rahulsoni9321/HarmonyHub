@@ -18,14 +18,7 @@ import { useAuthContext } from "../Context/Authuser";
 
 export function Signup() { 
   const navigate=useNavigate();
-
-  useEffect(()=>{
-    if (authuser){
-      navigate('/Dashboard');
-      return <></>
-    }
-  },[])
-   const {authuser,setauthuser}=useAuthContext();
+  
 
  
   return (
@@ -246,7 +239,6 @@ function Submit() {
 }
 
 function Footer() {
-  const navigate=useNavigate();
   return (
     <div className="text-center my-1 ">
       <div className="text-white text-xs md:text-sm font-medium">

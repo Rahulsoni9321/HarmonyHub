@@ -9,11 +9,19 @@ export const useAuthContext=()=>{
 
 
 export const AuthContextProvider=({children})=>{
-    let [authuser,setauthuser]=useState({})
+  const [authloading,setloading]=useState(false)
+    const [authuser,setauthuser]=useState(null)
+    console.log(authuser)
     useEffect(() => {
-        async function Userprofile() {
+     
+     
+      
+        setloading(true)
+         async function Userprofile() {
+          try
+          {
           const response = await axios.get(
-            `http://localhost:3000/api/v1/userprofile`,
+            `http://localhost:3000/api/v1/user/userprofile`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -21,13 +29,19 @@ export const AuthContextProvider=({children})=>{
             }
           );
           setauthuser(response.data.user);
-          
+          setloading(false)
          
         }
-        Userprofile();
+        catch(error){
+          console.log("error while fetching the information.", error)
+        }
+      }
+      
+    Userprofile();
       }, []);
 
-    return <AuthContext.Provider value={{authuser,setauthuser}}>
+
+    return <AuthContext.Provider value={{authuser,setauthuser,authloading}}>
         {children}
     </AuthContext.Provider>
 }

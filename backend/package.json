@@ -6,7 +6,6 @@
   "scripts": {
     "start": "nodemon index.js"
   },
-  
   "author": "Swapnil Rahul Shreyash",
   "license": "ISC",
   "dependencies": {

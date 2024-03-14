@@ -7,16 +7,19 @@ function usermiddleware(req,res,next){
     try{
      const verification=jwt.verify(jwttoken,process.env.JWT_KEY);
      if (verification){
-        req.userid=verification.userid;            //sending email to the headers for further use if needed.
+        req.userid=verification.userid;
+        console.log("no problem in middleware")            //sending id to the headers for further use if needed.
         next();
      }
      else {
+        console.log("here the error.")
         res.json(500).json({
             message:"You are not authorized."
         })
      }
     }
     catch(e){
+        console.log("this is the error",error)
         res.status(400).json({
             message:"Something went wrong.",
             details:e.message

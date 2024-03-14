@@ -117,12 +117,22 @@ router.post("/signin", async (req, res) => {
 
 router.get("/userprofile", usermiddleware, async (req, res) => {
   const id = req.userid;
+  console.log(id);
+ try 
+ { 
   const user = await User.findOne({
     _id: id,
   });
   res.json({
     user: user,
-  });
+  });}
+  catch(error){
+    console.log("this isthe error in the route",error)
+    return res.json({
+      message:"Something went wrong while fetching user details. Please try again.",
+      details:error
+    })
+  }
 });
 
 router.get("/allusers", usermiddleware, async (req, res) => {
