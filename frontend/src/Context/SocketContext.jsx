@@ -1,6 +1,7 @@
-import { Socket, io } from "socket.io-client";
+import {  io } from "socket.io-client";
 
 import { createContext, useState, useEffect, useContext, useRef } from "react";
+import { useUserDetailsContext } from "./Userdetails";
 import { useAuthContext } from "./Authuser";
 
 const Socketcontext = createContext();
@@ -12,30 +13,26 @@ export const useSocketContext = () => {
 export const SocketContextProvider = ({ children }) => {
   const [socketid, setsocketid] = useState(null);
   const [onlineuser, setonlineuser] = useState([]);
-  const { authuser } = useAuthContext();
-  
+  const {userdetails}=useUserDetailsContext();
+  const {authenticated}=useAuthContext();
 
   useEffect(() => {
-    if (localStorage.getItem("token") && authuser) {
-     
-        const socket = io("http://localhost:3000", {
-          query: {
-            userid: authuser._id,
-          },
-        });
-      
-      socket.on("onlineusers",(onlineusers)=>{
-        setonlineuser(onlineusers);
-    })
-      setsocketid(socket.id);
+      if (authenticated){
+      const socket = io("http://localhost:5000", {
+        query: {
+          userid: userdetails._id,
+        },
+      });
 
+      socket.on("onlineusers", (onlineusers) => {
+        setonlineuser(onlineusers);
+      });
+      setsocketid(socket.id);
       return () => {
         socket.close();
-      };
-    } else {
-      setsocketid(null);
     }
-  }, [authuser]);
+    }
+  }, []);
 
   return (
     <Socketcontext.Provider value={{ socketid, onlineuser }}>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { atom, atomFamily, selector, selectorFamily } from "recoil";
+import { atom } from "recoil";
 
 
 export const Chatclickedatom=atom ({

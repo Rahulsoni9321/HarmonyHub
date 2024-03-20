@@ -19,8 +19,8 @@ const cors=require("cors")
 app.use(cors())
 app.use(bodyParser.json());
 
-app.use("/api/v1/user", userroute);
-app.use("/api/v1/", messageroute);
+app.use("/api/v1", userroute);
+app.use("/api/v1", messageroute);
 
 
 

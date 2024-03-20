@@ -6,38 +6,47 @@ import {
   SelectedUserContextProvider,
   useSelectedUsercontext,
 } from "../Context/SelectedUser";
+import { WelcomeUser } from "../component/Welcome";
+import { SocketContextProvider } from "../Context/SocketContext";
+import {
+  UserContextProvider,
+} from "../Context/Userdetails";
 
 export function Dashboard() {
   const clickedchat = useRecoilValue(Chatclickedatom);
 
   return (
-    <SelectedUserContextProvider>
-      <div
-        className={
-          "w-full h-screen text-center bg-white flex bg-[url(/girlimage.jpg)] bg-contain bg-fixed"
-        }
-      >
-        <div className="w-4/12  left-0 h-full  shadow-3xl">
-          <Usercontainer></Usercontainer>
-        </div>
-        {clickedchat ? (
-          <div className="w-full overflow-auto ">
-            <Dashboardnav></Dashboardnav>
-            <ChatArea></ChatArea>
+    <UserContextProvider>
+      <SocketContextProvider>
+        <SelectedUserContextProvider>
+          <div
+            className={
+              "w-full h-screen text-center bg-white flex bg-[url(/girlimage.jpg)] bg-cover bg-center bg-fixed"
+            }
+          >
+            <div className="w-4/12  left-0 h-full  shadow-3xl">
+              <Usercontainer></Usercontainer>
+            </div>
+            {clickedchat ? (
+              <div className="w-full overflow-auto ">
+                <Dashboardnav></Dashboardnav>
+                <ChatArea></ChatArea>
+              </div>
+            ) : (
+              <div className="w-full overflow-auto ">
+                <WelcomeUser />{" "}
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="w-full overflow-auto ">
-            <Welcome></Welcome>{" "}
-          </div>
-        )}
-      </div>
-    </SelectedUserContextProvider>
+        </SelectedUserContextProvider>
+      </SocketContextProvider>
+    </UserContextProvider>
   );
 }
 
 function Dashboardnav() {
   const { loading, SelectedUser } = useSelectedUsercontext();
-
+  console.log("hii from dashboard nav")
   return (
     <div className="w-full overflow-auto">
       <div className="w-3/4 z-10 fixed top-0 h-16 flex items-center justify-between  bg-[#1d2226] rounded-none bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-80 border-b border-black ">

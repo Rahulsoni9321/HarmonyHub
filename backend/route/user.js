@@ -15,6 +15,7 @@ const { usermiddleware } = require("../middleware/user");
 
 router.post("/signup", async (req, res) => {
   const userpayload = req.body;
+  console.log("shifdsf")
   const parseuserpayload = signupschema.safeParse(userpayload); //Parsing the data and validating the format of the data in the body
   try {
     if (parseuserpayload.success) {
@@ -123,6 +124,7 @@ router.get("/userprofile", usermiddleware, async (req, res) => {
   const user = await User.findOne({
     _id: id,
   });
+  console.log(user)
   res.json({
     user: user,
   });}
@@ -136,9 +138,10 @@ router.get("/userprofile", usermiddleware, async (req, res) => {
 });
 
 router.get("/allusers", usermiddleware, async (req, res) => {
+  try { console.log("hello from allusers")
   const name = req.query.name || "";
   const getuser = req.userid;
-  try {
+  
     const allusers = await User.find({
       $or: [
         {
@@ -158,6 +161,7 @@ router.get("/allusers", usermiddleware, async (req, res) => {
       user: allusers,
     });
   } catch (error) {
+    console.log("this isthe erro in the ",error)
     res.status(400).json({
       message: error.message,
     });

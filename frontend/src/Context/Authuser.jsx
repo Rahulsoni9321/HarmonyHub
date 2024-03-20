@@ -1,47 +1,34 @@
-import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {toast} from "react-hot-toast";
+export const AuthContext = createContext();
 
-export const AuthContext=createContext();
+export const useAuthContext = () => {
+  return useContext(AuthContext);
+};
 
-export const useAuthContext=()=>{
-    return useContext(AuthContext);
-} 
+export const AuthContextProvider = ({ children }) => {
+  const navigate=useNavigate();
+const [authenticated,setauthenticated] = useState(!!localStorage.getItem('token'));   
 
+  const login= (token)=>{
+    localStorage.setItem('token',token)
+    setauthenticated(true)
+  }
+  
 
-export const AuthContextProvider=({children})=>{
-  const [authloading,setloading]=useState(false)
-    const [authuser,setauthuser]=useState(null)
-    console.log(authuser)
-    useEffect(() => {
-     
-     
-      
-        setloading(true)
-         async function Userprofile() {
-          try
-          {
-          const response = await axios.get(
-            `http://localhost:3000/api/v1/user/userprofile`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-          setauthuser(response.data.user);
-          setloading(false)
-         
-        }
-        catch(error){
-          console.log("error while fetching the information.", error)
-        }
-      }
-      
-    Userprofile();
-      }, []);
+  const logout=()=>{
+    localStorage.removeItem('token');
+    setauthenticated(false);
+    toast.success("Logged out successfully.");
+    
+    navigate('/');
 
+  }
 
-    return <AuthContext.Provider value={{authuser,setauthuser,authloading}}>
-        {children}
+  return (
+    <AuthContext.Provider value={{ logout,login, authenticated }}>
+      {children}
     </AuthContext.Provider>
-}
+  );
+};

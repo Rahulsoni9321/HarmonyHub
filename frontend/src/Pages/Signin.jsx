@@ -1,16 +1,17 @@
 // import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
-import { Inputbox } from "./Inputbox";
+import { Inputbox } from "../component/Inputbox";
 import axios from "axios";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   EmailSigninatom,
-  PasswordSinginatom,         
+  PasswordSinginatom,
   ResponseMessageSigninAtom,
   SiginProgressatom,
 } from "../atoms/Signinatom";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../Context/Authuser";
+import { BACKEND_URL } from "../config";
 
 export function Signin() {
   const message = useRecoilValue(ResponseMessageSigninAtom);
@@ -22,7 +23,7 @@ export function Signin() {
         {/* Main div starts here */}
 
         <div className="col-span-4 sm:col-span-3 w-full h-screen  flex justify-center items-center  bg-gray-600 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10   ">
-          <div className="w-11/12 h-80  bg-gray-800 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 border border-gray-100 ">
+          <div className="w-11/12   bg-gray-800 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 border border-gray-100 ">
             <div className="text-center pt-6">
               <p className="text-xl sm:text-3xl text-white font-bold">Signin</p>
               <p className="text-md sm:text-lg font-regular leading-tight text-gray-300 pt-2">
@@ -84,69 +85,70 @@ function Button() {
   const password = useRecoilValue(PasswordSinginatom);
   const setmessage = useSetRecoilState(ResponseMessageSigninAtom);
   const [loading, setloading] = useRecoilState(SiginProgressatom);
-  const {setauthuser}=useAuthContext();
- 
+  const {login} = useAuthContext();
   const navigate = useNavigate();
+
+
+  const handleclick = async () => {
+    try {
+      setloading(true);
+      const response = await axios.post(
+        `${BACKEND_URL}/signin`,
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.message.includes("successfully")) {
+        setmessage(response.data.message);
+    
+        setloading(false);
+
+        toast.success("Signed up Successfully.");
+        login(response.data.token)
+        navigate("/Dashboard", { replace: true });
+      }
+      ;
+    } catch (error) {
+      setloading(false);
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        setmessage(
+          errorMessage ||
+            "An error occurred while signing in. Please try again."
+        );
+      } else {
+        setmessage("An error occurred while signing in. Please try again.");
+      }
+      setTimeout(() => {
+        setmessage("");
+      }, 2000);
+    }
+  };
+
   return (
     <div className=" my-2 mt-3 w-full text-center">
       <button
         className="w-11/12 p-1 py-1.5 text-xs text-white rounded-lg  text-center bg-gray-800 hover:bg-zinc-900"
-        onClick={async () => {
-          try {
-            setloading(true);
-            const response = await axios.post(
-              "http://localhost:3000/api/v1/signin",
-              {
-                email,
-                password,
-              },
-              {
-                headers: {
-                  "Content-type": "application/json",
-                },
-              }
-            );
-           
-            if (response.data.message.includes("successfully")) {
-              setmessage(response.data.message);
-              setauthuser(response.data.user);
-
-              setloading(false)
-
-              toast.success("Signed up Successfully.")
-              navigate("/Dashboard",{replace:true});
-              localStorage.setItem('token',response.data.token)
-            }  t
-          } catch (error) {
-            setloading(false);
-            if (error.response && error.response.data) {
-              const errorMessage = error.response.data.message;
-              setmessage(
-                errorMessage ||
-                  "An error occurred while signing in. Please try again."
-              );
-            } else {
-              setmessage(
-                "An error occurred while signing in. Please try again."
-              );
-            }
-            setTimeout(() => {
-              setmessage("");
-            }, 2000);
-          }
-        }}
+        onClick={handleclick}
       >
         {loading ? (
-           <div className="flex justify-center  items-center">
-           <div
-             class="animate-spin inline-block w-5 h-5 mr-4 border-[3px] border-current border-t-transparent text-white rounded-full "
-             role="status"
-             aria-label="loading"
-           >
-             <span class="sr-only">Loading...</span>
-           </div>
-           <p >Signing in...</p>
-         </div>
+          <div className="flex justify-center  items-center">
+            <div
+              class="animate-spin inline-block w-5 h-5 mr-4 border-[3px] border-current border-t-transparent text-white rounded-full "
+              role="status"
+              aria-label="loading"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+            <p>Signing in...</p>
+          </div>
         ) : (
           <p className="font-medium">Sign in</p>
         )}
@@ -156,15 +158,13 @@ function Button() {
 }
 
 function Footer() {
-  const navigate = useNavigate();
-
   return (
-    <div className="text-center ">
+    <div className="text-center my-3 ">
       <div className="text-white text-xs md:text-sm font-regular">
         Don't have an account?{" "}
         <Link
           className="bg-blend font-medium underline underline-offset-1 text-gray-800 hover:text-gray-900 "
-          to={'/signup'}
+          to={"/signup"}
         >
           Signup
         </Link>

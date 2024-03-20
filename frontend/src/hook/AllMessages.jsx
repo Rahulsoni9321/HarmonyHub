@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelectedUsercontext } from "../src/Context/SelectedUser";
+import { useSelectedUsercontext } from "../Context/SelectedUser";
+import { BACKEND_URL } from "../config";
 
 export function useAllMessages() {
   const [loading, setloading] = useState(false);
@@ -10,7 +11,7 @@ export function useAllMessages() {
     async function Conversation() {
       setloading(true);
       const response = await axios.get(
-        `http://localhost:3000/api/v1/send/${SelectedUserId}`,
+        `${BACKEND_URL}/send/${SelectedUserId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

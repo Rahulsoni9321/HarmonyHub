@@ -3,19 +3,19 @@ import { TbSend } from "react-icons/tb";
 import axios from "axios";
 import { Loadingsendatom, Sendermessageatom } from "../atoms/SendMessageatom";
 import { useSelectedUsercontext } from "../Context/SelectedUser";
-import { useAllMessages } from "../../hook/AllMessages";
+import { useAllMessages } from "../hook/AllMessages";
 import { useEffect, useRef } from "react";
 import { GiNothingToSay } from "react-icons/gi";
-import { useAuthContext } from "../Context/Authuser";
 import { useSocketContext } from "../Context/SocketContext";
 import { SkeletonMessages } from "../Skeletons/MessageSkeletons";
 import { extractTime } from "../component/ExtractTime";
+import { useUserDetailsContext } from "../Context/Userdetails";
 
 export function ChatArea() {
   const { setAllMessages, AllMessages, loading } = useAllMessages();
   const { SelectedUserId, SelectedUser } = useSelectedUsercontext();
   const { socketid } = useSocketContext();
-  const { authuser, authloading } = useAuthContext();
+  const {userdetails,userloading} = useUserDetailsContext();
   const lastmessageref = useRef();
   const [messages, setMessages] = useRecoilState(Sendermessageatom);
   const [sentloading, setsentloading] = useRecoilState(Loadingsendatom);
@@ -31,7 +31,7 @@ export function ChatArea() {
   useEffect(() => {
     socketid.on("newmessages", (msg) => {
       console.log(msg);
-      setAllMessages((AllMessages) => [...AllMessages, msg]);
+      setAllMessages([...AllMessages, ...msg]);
     });
   }, []);
 
@@ -62,7 +62,7 @@ export function ChatArea() {
         }
       );
       const sentmessage = res.data.newmessage;
-      setAllMessages((AllMessages) => [...AllMessages, sentmessage]);
+      setAllMessages([...AllMessages, ...sentmessage]);
       setsentloading(true);
       setMessages("");
     } catch (error) {
@@ -90,7 +90,7 @@ export function ChatArea() {
                       alt="Tailwind CSS chat bubble component"
                       src={
                         message.receiverId == SelectedUserId
-                          ? authuser.profilepic
+                          ? userdetails.profilepic
                           : SelectedUser.profilepic
                       }
                     />

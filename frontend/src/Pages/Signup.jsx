@@ -1,6 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import { Inputbox } from "./Inputbox";
-import "tailwindcss/tailwind.css";
+import { Inputbox } from "../component/Inputbox";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -15,9 +13,9 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../Context/Authuser";
+import { BACKEND_URL } from "../config";
 
 export function Signup() { 
-  const navigate=useNavigate();
   
 
  
@@ -25,11 +23,10 @@ export function Signup() {
     <div className="bg-[bg.png]  w-full h-screen overflow-y-auto ">
       <div className="grid grid-cols-4 md:grid-cols-9 w-full h-full  ">
         <div className="col-span-0 md:col-span-3 sm:w-full h-screen bg-gray-700 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 overflow-auto">
-          {/* <img className="w-full h-screen z-0" src="a856b586153070160e616d035fff87fe.jpg"></img> */}
         </div>
 
         <div className="col-span-4 md:col-span-3 flex items-center sm:w-full h-screen bg-gray-700 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 overflow-auto ">
-          <div className="w-11/12 h-[26rem] bg-gray-700 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-gray-100">
+          <div className="w-11/12  bg-gray-700 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-gray-100">
             <Header></Header>
             <div>
               <Username></Username>
@@ -44,7 +41,6 @@ export function Signup() {
         </div>
 
         <div className="col-span-0 md:col-span-3 sm:w-full h-screen  bg-gray-700 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 overflow-auto ">
-          {/* <img className="w-full h-screen z-0" src="a856b586153070160e616d035fff87fe.jpg"></img> */}
         </div>
       </div>
     </div>
@@ -164,7 +160,7 @@ function Submit() {
   const lastname = useRecoilValue(Signinlastnameatom);
   const password = useRecoilValue(Singuppasswordatom);
   const gender = useRecoilValue(Signupgenderatom);
-  const {authuser,setauthuser}=useAuthContext();
+  const {login}=useAuthContext();
   const navigate = useNavigate();
 
 
@@ -173,7 +169,7 @@ function Submit() {
     try {
       setloading(true)
       const response = await axios.post(
-        "http://localhost:3000/api/v1/signup",
+        `${BACKEND_URL}/signup`,
 
         {
           email,
@@ -192,8 +188,7 @@ function Submit() {
       if (response.data.message.includes("successfully")) {
         setloading(false)
         toast.success("Signed up Successfully.")
-        setauthuser(response.data.user);
-        localStorage.setItem('token',response.data.token)
+        login(response.data.token)
         navigate("/Dashboard",{replace:true});
       }
     } catch (error) {
@@ -240,7 +235,7 @@ function Submit() {
 
 function Footer() {
   return (
-    <div className="text-center my-1 ">
+    <div className="text-center my-5 ">
       <div className="text-white text-xs md:text-sm font-medium">
         Already have an account?{" "}
         <Link
