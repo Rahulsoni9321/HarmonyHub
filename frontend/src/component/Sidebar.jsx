@@ -32,27 +32,27 @@ export function Usercontainer() {
 
   useEffect(() => {
     async function fetchdata() {
-      console.log("inside the fetchdata");
-      setloading(true);
-      try {
-        const response = await axios.get(
-          `${BACKEND_URL}/allusers?name=${debouncedvalue}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        setloading(false);
-
-        setallusers(response.data.user);
-      } catch (error) {
-        console.log(error);
+ 
+    try  {
+        setloading(true)
+         const response = await axios.get(`${BACKEND_URL}/allusers/name=${debouncedvalue}`,{
+       headers:{
+      Authorization:`Bearer ${localStorage.getItem('token')}`
+       }
+     })
+        setloading(false)
+        setallusers(response.data.user)
       }
+      catch(error){
+        console.log(error)
+
+      }
+
+      
+      }
+      fetchdata();
     }
-    fetchdata();
-  }, [debouncedvalue]);
+  , [debouncedvalue]);
 
   console.log(allusers);
 

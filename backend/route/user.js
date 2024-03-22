@@ -13,9 +13,11 @@ const bcrypt = require("bcryptjs");
 const { usermiddleware } = require("../middleware/user");
 
 
+
+
+
 router.post("/signup", async (req, res) => {
   const userpayload = req.body;
-  console.log("shifdsf")
   const parseuserpayload = signupschema.safeParse(userpayload); //Parsing the data and validating the format of the data in the body
   try {
     if (parseuserpayload.success) {
@@ -65,7 +67,7 @@ router.post("/signup", async (req, res) => {
     }
   } catch (e) {
     res.status(401).json({
-      message: "Internal Server error. Please try again later. " + e,
+      message: "Error while signing up. Please try again later. " + e,
     });
   }
 });

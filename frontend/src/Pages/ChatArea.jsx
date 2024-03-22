@@ -14,7 +14,7 @@ import { useUserDetailsContext } from "../Context/Userdetails";
 export function ChatArea() {
   const { setAllMessages, AllMessages, loading } = useAllMessages();
   const { SelectedUserId, SelectedUser } = useSelectedUsercontext();
-  const { socketid } = useSocketContext();
+  // const { socketid } = useSocketContext();
   const {userdetails,userloading} = useUserDetailsContext();
   const lastmessageref = useRef();
   const [messages, setMessages] = useRecoilState(Sendermessageatom);
@@ -28,12 +28,12 @@ export function ChatArea() {
     }, 100);
   }, [AllMessages]);
 
-  useEffect(() => {
-    socketid.on("newmessages", (msg) => {
-      console.log(msg);
-      setAllMessages([...AllMessages, ...msg]);
-    });
-  }, []);
+  // useEffect(() => {
+  //   socketid.on("newmessages", (msg) => {
+  //     console.log(msg);
+  //     setAllMessages([...AllMessages, ...msg]);
+  //   });
+  // }, []);
 
   if (loading) {
     return (

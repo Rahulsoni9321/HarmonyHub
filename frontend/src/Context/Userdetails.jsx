@@ -18,15 +18,21 @@ export const UserContextProvider=({children})=>{
             async function Userdetails(){
                 console.log("how much time usedetails")
             setloading(true)
-            const response = await axios.get(`${BACKEND_URL}/userprofile`,{
-                headers:{
-                    Authorization:`Bearer ${localStorage.getItem('token')}`
+            fetch(
+                `${BACKEND_URL}/userprofile`,
+                {
+                  method: "GET",
+                
+                  headers: {
+                    "Authorization":`Bearer ${localStorage.getItem('token')}`                  },
                 }
+              ).then(async function (res) {
+                const json = await res.json();
+                setuserdetails(json.user)
+                setloading(false);
             })
-            setuserdetails(response.data.user)
         }
         Userdetails();
-        setloading(false);
     }
     catch(error){
         console.error(error);
