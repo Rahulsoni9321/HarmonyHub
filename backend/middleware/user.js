@@ -8,7 +8,7 @@ function usermiddleware(req,res,next){
      const verification=jwt.verify(jwttoken,process.env.JWT_KEY);
      if (verification){
         req.userid=verification.userid;
-        console.log("no problem in middleware")            //sending id to the headers for further use if needed.
+                
         next();
      }
      else {

@@ -35,7 +35,7 @@ export function Usercontainer() {
  
     try  {
         setloading(true)
-         const response = await axios.get(`${BACKEND_URL}/allusers/name=${debouncedvalue}`,{
+         const response = await axios.get(`${BACKEND_URL}/allusers?name=${debouncedvalue}`,{
        headers:{
       Authorization:`Bearer ${localStorage.getItem('token')}`
        }
@@ -54,7 +54,7 @@ export function Usercontainer() {
     }
   , [debouncedvalue]);
 
-  console.log(allusers);
+  
 
   return (
     <div className="h-screen w-full bg-blue-300 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border-r border-gray-100  overflow-y-auto">

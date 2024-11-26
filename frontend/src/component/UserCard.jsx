@@ -1,14 +1,15 @@
 import { useSetRecoilState } from "recoil";
 import { Chatclickedatom } from "../atoms/atoms";
 import { useSocketContext } from "../Context/SocketContext";
+import { Link } from "react-router-dom";
 
 
-export function UserCard({user}) {
-    const setclick=useSetRecoilState(Chatclickedatom)
-    const { onlineuser } = useSocketContext();
-    return   <Link to={`/Dashboard?id=${user._id}`} >
-    <div onClick={()=>{
-        setclick(true)
+export function UserCard({ user }) {
+  const setclick = useSetRecoilState(Chatclickedatom)
+  const { onlineuser } = useSocketContext();
+  return <Link to={`/Dashboard?id=${user._id}`} className="w-full flex  justify-center " >
+    <div onClick={() => {
+      setclick(true)
     }} className=" bg-blend w-11/12 h-16  bg-[#1d2226] bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-80 hover:bg-cyan-500 hover:rounded-xl mb-2 rounded-md border-none">
       <div className="flex gap-4 items-center h-full mx-4 ">
         <div

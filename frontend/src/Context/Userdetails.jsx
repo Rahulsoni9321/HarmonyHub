@@ -3,47 +3,52 @@ import { BACKEND_URL } from "../config";
 
 import { createContext, useContext, useState, useEffect } from "react";
 
-const UserContext=createContext();
+const UserContext = createContext();
 
-export const  useUserDetailsContext=()=>{
+export const useUserDetailsContext = () => {
     return useContext(UserContext)
 }
 
-export const UserContextProvider=({children})=>{
-    const [userdetails,setuserdetails]=useState({});  
-    const [userloading,setloading] = useState(false);
-    
-    useEffect(()=>{
-        try { 
-            async function Userdetails(){
-                console.log("how much time usedetails")
-            setloading(true)
-            fetch(
-                `${BACKEND_URL}/userprofile`,
-                {
-                  method: "GET",
-                
-                  headers: {
-                    "Authorization":`Bearer ${localStorage.getItem('token')}`                  },
-                }
-              ).then(async function (res) {
-                const json = await res.json();
-                setuserdetails(json.user)
-                setloading(false);
-            })
-        }
-        Userdetails();
-    }
-    catch(error){
-        console.error(error);
-    }
-    
+export const UserContextProvider = ({ children }) => {
+    const [userdetails, setuserdetails] = useState({});
+    const [userloading, setloading] = useState(true);
 
-    },[])
+    useEffect(() => {
+
+        async function Userdetails() {
+            try {
+                
+                fetch(
+                    `${BACKEND_URL}/userprofile`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization": `Bearer ${localStorage.getItem('token')}`
+                        },
+                    }
+                ).then(async function (res) {
+                    const json = await res.json();
+                    setuserdetails(json.user)
+                   
+                })
+            }
+            catch (error) {
+                console.error(error);
+            }
+            setloading(false);
+        }
+
+        Userdetails();
+
+
+
+
+    }, [])
 
     return (
-        <UserContext.Provider value={{userdetails,userloading}}>
-           {children}
+        <UserContext.Provider value={{ userdetails, userloading }}>
+            {children}
         </UserContext.Provider>
     )
 

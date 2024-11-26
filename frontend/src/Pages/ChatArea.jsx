@@ -10,11 +10,12 @@ import { useSocketContext } from "../Context/SocketContext";
 import { SkeletonMessages } from "../Skeletons/MessageSkeletons";
 import { extractTime } from "../component/ExtractTime";
 import { useUserDetailsContext } from "../Context/Userdetails";
+import { BACKEND_URL } from "../config";
 
 export function ChatArea() {
   const { setAllMessages, AllMessages, loading } = useAllMessages();
   const { SelectedUserId, SelectedUser } = useSelectedUsercontext();
-  // const { socketid } = useSocketContext();
+  const { socketid } = useSocketContext();
   const {userdetails,userloading} = useUserDetailsContext();
   const lastmessageref = useRef();
   const [messages, setMessages] = useRecoilState(Sendermessageatom);
@@ -28,12 +29,12 @@ export function ChatArea() {
     }, 100);
   }, [AllMessages]);
 
-  // useEffect(() => {
-  //   socketid.on("newmessages", (msg) => {
-  //     console.log(msg);
-  //     setAllMessages([...AllMessages, ...msg]);
-  //   });
-  // }, []);
+  useEffect(() => {
+    socketid.on("newmessages", (msg) => {
+      console.log(msg);
+      setAllMessages([...AllMessages, ...msg]);
+    });
+  }, []);
 
   if (loading) {
     return (
@@ -51,7 +52,7 @@ export function ChatArea() {
     setsentloading(false);
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/v1/send/${SelectedUserId}`,
+        `${BACKEND_URL}/send/${SelectedUserId}`,
         {
           messages: messages,
         },

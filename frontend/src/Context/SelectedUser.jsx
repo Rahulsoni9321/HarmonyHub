@@ -30,7 +30,10 @@ export const SelectedUserContextProvider = ({ children }) => {
         setloading(false);
         setSelectedUser(response.data.receiveruser);
       }
-      SelectedUser();
+      if (SelectedUserId) {
+
+        SelectedUser();
+      }
     } catch (error) {
       console.log("Error in SelectedUser context ", error);
     }

@@ -58,7 +58,7 @@ router.post("/signup", async (req, res) => {
       res.json({
         token: token,
         message: "User created successfully.",
-        user:newuser
+        user: newuser
       });
     } else {
       res.status(500).json({
@@ -82,7 +82,7 @@ router.post("/signin", async (req, res) => {
       }).exec();
 
       if (findinguser) {
-        const checkpassword = await bcrypt.compare(userpayload.password,findinguser.password);
+        const checkpassword = await bcrypt.compare(userpayload.password, findinguser.password);
         if (checkpassword) {
           const token = jwt.sign(
             { userid: findinguser._id },
@@ -90,10 +90,10 @@ router.post("/signin", async (req, res) => {
           );
           res.cookie("token", token);
 
-         return res.json({
+          return res.json({
             token: token,
             message: "Signed in successfully",
-            user:findinguser
+            user: findinguser
           });
         } else {
           return res.json({
@@ -120,30 +120,32 @@ router.post("/signin", async (req, res) => {
 
 router.get("/userprofile", usermiddleware, async (req, res) => {
   const id = req.userid;
-  console.log(id);
- try 
- { 
-  const user = await User.findOne({
-    _id: id,
-  });
-  console.log(user)
-  res.json({
-    user: user,
-  });}
-  catch(error){
-    console.log("this isthe error in the route",error)
+
+  try {
+    const user = await User.findOne({
+      _id: id,
+    });
+
+    res.json({
+      user: user,
+    });
+  }
+  catch (error) {
+    console.log("this is the error in the route", error)
     return res.json({
-      message:"Something went wrong while fetching user details. Please try again.",
-      details:error
+      message: "Something went wrong while fetching user details. Please try again.",
+      details: error
     })
   }
 });
 
 router.get("/allusers", usermiddleware, async (req, res) => {
-  try { console.log("hello from allusers")
-  const name = req.query.name || "";
-  const getuser = req.userid;
-  
+  try {
+
+    console.log("all users")
+    const name = req.query.name || "";
+
+
     const allusers = await User.find({
       $or: [
         {
@@ -163,7 +165,7 @@ router.get("/allusers", usermiddleware, async (req, res) => {
       user: allusers,
     });
   } catch (error) {
-    console.log("this isthe erro in the ",error)
+    console.log("this isthe erro in the ", error)
     res.status(400).json({
       message: error.message,
     });
@@ -175,7 +177,7 @@ router.get("/receiveruser", usermiddleware, async (req, res) => {
   const user = await User.findOne({
     _id: id,
   });
-  
+
   res.json({
     receiveruser: user,
   });

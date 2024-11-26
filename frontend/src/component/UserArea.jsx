@@ -2,12 +2,12 @@ import { Logout } from "./Logout"
 
 export function UserArea({userdetails,loading}) {
 
-  if (loading){
+  if (!userdetails){
     <div className="w-1/4 h-8">
       Loading...
     </div>
   }
-      
+      console.log(userdetails);
     return (  <div className="flex items-center justify-between">
 
     <div className="flex items-center gap-2 my-2 mt-4 ml-2">
