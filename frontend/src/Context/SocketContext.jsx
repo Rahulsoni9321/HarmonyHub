@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { createContext, useState, useEffect, useContext, useRef } from "react";
 import { useUserDetailsContext } from "./Userdetails";
 import { useAuthContext } from "./Authuser";
+import { SOCKET_BACKEND_URL } from "../config";
 
 const Socketcontext = createContext();
 
@@ -20,7 +21,7 @@ export const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     if (authenticated && userdetails) {
   
-      const socket =  io("http://localhost:5000", {
+      const socket =  io(`${SOCKET_BACKEND_URL}`, {
         query: {
           userid: userdetails._id,
         },
