@@ -12,19 +12,20 @@ export const useSocketContext = () => {
 
 export const SocketContextProvider = ({ children }) => {
   const [socketid, setsocketid] = useState(null);
+  const [socket,setsocket] = useState(null);
   const [onlineuser, setonlineuser] = useState([]);
-  const { userdetails,userloading } = useUserDetailsContext();
+  const { userdetails } = useUserDetailsContext();
   const { authenticated } = useAuthContext();
 
   useEffect(() => {
     if (authenticated && userdetails) {
-      console.log( userdetails._id);
+  
       const socket =  io("http://localhost:5000", {
         query: {
           userid: userdetails._id,
         },
       });
-    console.log(socket);
+      setsocket(socket);
       socket.on("onlineusers", (onlineusers) => {
         setonlineuser(onlineusers);
       });
@@ -34,9 +35,8 @@ export const SocketContextProvider = ({ children }) => {
       }
     }
   }, [authenticated, userdetails]);
-  console.log(userdetails);
   return (
-    <Socketcontext.Provider value={{ socketid, onlineuser }}>
+    <Socketcontext.Provider value={{ socketid, onlineuser,socket }}>
       {children}
     </Socketcontext.Provider>
   );

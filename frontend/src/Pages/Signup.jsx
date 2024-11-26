@@ -14,11 +14,12 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../Context/Authuser";
 import { BACKEND_URL } from "../config";
+import { BsStars } from "react-icons/bs";
 
-export function Signup() { 
-  
+export function Signup() {
 
- 
+
+
   return (
     <div className="bg-[bg.png]  w-full h-screen overflow-y-auto ">
       <div className="grid grid-cols-4 md:grid-cols-9 w-full h-full  ">
@@ -50,8 +51,10 @@ export function Signup() {
 function Header() {
   return (
     <div className="text-center p-3 pt-4 leading-tight ">
-      <h1 className="text-xl text-white md:text-3xl font-bold">Signup</h1>
-      <p className="font-normal text-xs md:text-base text-gray-300 pt-1 ">
+      <div className="text-xl flex items-center justify-center gap-1 text-white md:text-3xl font-semibold"><div>
+        Harmony<span className="italic text-[#7e594d] font-bold">Hub</span>   </div>             <BsStars className="text-yellow-400 w-12 h-10"></BsStars>{" "}
+      </div>
+      <p className="font-normal text-sm md:text-base text-gray-300 pt-1 ">
         {" "}
         Enter your information to create your account
       </p>
@@ -64,7 +67,7 @@ function Username() {
 
   return (
     <div>
-      <p className=" pb-1 ml-5 font-semibold text-xs text-white">Username</p>
+      <p className=" pb-1 ml-5 font-semibold text-sm text-white">Username</p>
       <Inputbox
         placeholder="Enter your email"
         type="text"
@@ -79,7 +82,7 @@ function FirstName() {
 
   return (
     <div>
-      <p className="pt-2 pb-1 ml-5 font-semibold text-xs text-white">
+      <p className="pt-2 pb-1 ml-5 font-semibold text-sm text-white">
         Firstname
       </p>
       <Inputbox
@@ -95,7 +98,7 @@ function LastName() {
 
   return (
     <div>
-      <p className="pt-2 pb-1 ml-5 font-semibold text-xs text-white ">
+      <p className="pt-2 pb-1 ml-5 font-semibold text-sm text-white ">
         Lastname
       </p>
       <Inputbox
@@ -112,26 +115,26 @@ function Gender() {
 
   return (
     <div className="flex  w-3/5 items-center pt-2 justify-between">
-      <p className=" ml-5 font-semibold text-xs text-white ">Gender</p>
+      <p className=" ml-5 font-semibold text-sm text-white ">Gender</p>
       <input
-        className=" p-1 pl-3 text-xs font-thin text-white"
+        className=" p-1 pl-3 text-sm font-thin text-white"
         type="radio"
         value={'Male'}
         onChange={(e) => {
           setgender(e.target.value);
         }}
       ></input>
-      <span className="text-xs text-white font-semibold">Male</span>
+      <span className="text-sm text-white font-semibold">Male</span>
       <input
-        className=" p-1 pl-3 text-xs font-thin text-white"
+        className=" p-1 pl-3 text-sm font-thin text-white"
         type="radio"
         value={'Female'}
         onChange={(e) => {
-          
+
           setgender(e.target.value);
         }}
       ></input>
-      <span className="text-xs text-white font-semibold">Female</span>
+      <span className="text-sm text-white font-semibold">Female</span>
     </div>
   );
 }
@@ -141,7 +144,7 @@ function Password() {
 
   return (
     <div>
-      <p className="pt-1 pb-1 ml-5 font-semibold text-xs text-white ">
+      <p className="pt-1 pb-1 ml-5 font-semibold text-sm text-white ">
         Password
       </p>
       <Inputbox
@@ -154,13 +157,13 @@ function Password() {
 }
 function Submit() {
   const [message, setmessage] = useRecoilState(Signupmessageatom);
-  const [loading,setloading]=useRecoilState(SignupProgressatom)
+  const [loading, setloading] = useRecoilState(SignupProgressatom)
   const email = useRecoilValue(Signupemailatom);
   const firstname = useRecoilValue(SignupFirstnameatom);
   const lastname = useRecoilValue(Signinlastnameatom);
   const password = useRecoilValue(Singuppasswordatom);
   const gender = useRecoilValue(Signupgenderatom);
-  const {login}=useAuthContext();
+  const { login } = useAuthContext();
   const navigate = useNavigate();
 
 
@@ -189,7 +192,7 @@ function Submit() {
         setloading(false)
         toast.success("Signed up Successfully.")
         login(response.data.token)
-        navigate("/Dashboard",{replace:true});
+        navigate("/Dashboard", { replace: true });
       }
     } catch (error) {
       setloading(false)
@@ -197,7 +200,7 @@ function Submit() {
         const errorMessage = error.response.data.message;
         setmessage(
           errorMessage ||
-            "An error occurred while signing up. Please try again."
+          "An error occurred while signing up. Please try again."
         );
       } else {
         setmessage("An error occurred while signing up. Please try again.");
@@ -209,24 +212,24 @@ function Submit() {
   };
   return (
     <>
-      <div className="ml-6 text-red-500 text-xs font-regular my-1">
+      <div className="ml-6 text-red-500 text-sm font-regular my-1">
         {message}
       </div>
       <div className=" my-2 w-full text-center">
         <button
-          className="w-11/12 p-1 py-1.5 text-xs text-white rounded-lg bg-gray-700 text-center hover:bg-gray-800"
+          className="w-11/12 p-1 py-2 mt-2 text-sm text-white rounded-lg bg-[#161819] text-center hover:bg-gray-800"
           onClick={handleclick}
         >
-          {loading ? ( <div className="flex justify-center  items-center">
-                      <div
-                        class="animate-spin inline-block w-5 h-5 mr-4 border-[3px] border-current border-t-transparent text-white rounded-full "
-                        role="status"
-                        aria-label="loading"
-                      >
-                        <span class="sr-only">Loading...</span>
-                      </div>
-                      <p>Signing up...</p>
-                    </div>):("Sign up")}
+          {loading ? (<div className="flex justify-center  items-center">
+            <div
+              class="animate-spin inline-block w-5 h-5 mr-4 border-[3px] border-current border-t-transparent text-white rounded-full "
+              role="status"
+              aria-label="loading"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+            <p>Signing up...</p>
+          </div>) : ("Sign up")}
         </button>
       </div>
     </>
@@ -236,11 +239,11 @@ function Submit() {
 function Footer() {
   return (
     <div className="text-center my-5 ">
-      <div className="text-white text-xs md:text-sm font-medium">
+      <div className="text-white text-sm md:text-sm font-medium">
         Already have an account?{" "}
         <Link
           className="bg-blend underline underline-offset-1 text-gray-400 hover:text-gray-900"
-         to={'/signin'}
+          to={'/signin'}
         >
           Signin
         </Link>

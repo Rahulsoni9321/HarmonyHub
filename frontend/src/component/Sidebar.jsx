@@ -23,8 +23,8 @@ function useDebounce(inputuser) {
 }
 
 export function Usercontainer() {
-  
-  const {userloading,userdetails}=useUserDetailsContext();
+
+  const { userloading, userdetails } = useUserDetailsContext();
   const [allusers, setallusers] = useRecoilState(AllUsersSidebaratom);
   const [filter, setfilter] = useRecoilState(FilterAtom);
   const debouncedvalue = useDebounce(filter);
@@ -32,29 +32,29 @@ export function Usercontainer() {
 
   useEffect(() => {
     async function fetchdata() {
- 
-    try  {
+
+      try {
         setloading(true)
-         const response = await axios.get(`${BACKEND_URL}/allusers?name=${debouncedvalue}`,{
-       headers:{
-      Authorization:`Bearer ${localStorage.getItem('token')}`
-       }
-     })
+        const response = await axios.get(`${BACKEND_URL}/allusers?name=${debouncedvalue}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
         setloading(false)
         setallusers(response.data.user)
       }
-      catch(error){
+      catch (error) {
         console.log(error)
 
       }
 
-      
-      }
-      fetchdata();
-    }
-  , [debouncedvalue]);
 
-  
+    }
+    fetchdata();
+  }
+    , [debouncedvalue]);
+
+
 
   return (
     <div className="h-screen w-full bg-blue-300 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border-r border-gray-100  overflow-y-auto">

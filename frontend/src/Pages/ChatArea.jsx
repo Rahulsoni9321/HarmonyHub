@@ -4,37 +4,48 @@ import axios from "axios";
 import { Loadingsendatom, Sendermessageatom } from "../atoms/SendMessageatom";
 import { useSelectedUsercontext } from "../Context/SelectedUser";
 import { useAllMessages } from "../hook/AllMessages";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GiNothingToSay } from "react-icons/gi";
 import { useSocketContext } from "../Context/SocketContext";
 import { SkeletonMessages } from "../Skeletons/MessageSkeletons";
 import { extractTime } from "../component/ExtractTime";
 import { useUserDetailsContext } from "../Context/Userdetails";
 import { BACKEND_URL } from "../config";
+import toast from "react-hot-toast";
 
 export function ChatArea() {
   const { setAllMessages, AllMessages, loading } = useAllMessages();
   const { SelectedUserId, SelectedUser } = useSelectedUsercontext();
-  const { socketid } = useSocketContext();
-  const {userdetails,userloading} = useUserDetailsContext();
+  const { socket } = useSocketContext();
+  const { userdetails } = useUserDetailsContext();
   const lastmessageref = useRef();
   const [messages, setMessages] = useRecoilState(Sendermessageatom);
   const [sentloading, setsentloading] = useRecoilState(Loadingsendatom);
 
   useEffect(() => {
     setTimeout(() => {
-      if (lastmessageref) {
+      if (lastmessageref.current) {
         lastmessageref.current.scrollIntoView({ behavior: "smooth" });
       }
     }, 100);
   }, [AllMessages]);
 
   useEffect(() => {
-    socketid.on("newmessages", (msg) => {
-      console.log(msg);
-      setAllMessages([...AllMessages, ...msg]);
-    });
-  }, []);
+    if (socket) {
+      socket.on("newmessages", (msg) => {
+
+        if (SelectedUserId === msg.senderId) {
+          setAllMessages([...AllMessages, msg]);
+        }
+        else {
+          null;
+
+        }
+
+
+      });
+    }
+  }, [socket, AllMessages, SelectedUser]);
 
   if (loading) {
     return (
@@ -47,6 +58,8 @@ export function ChatArea() {
       </div>
     );
   }
+
+
 
   const sendMessageevent = async () => {
     setsentloading(false);
@@ -62,11 +75,11 @@ export function ChatArea() {
           },
         }
       );
-      const sentmessage = res.data.newmessage;
-      setAllMessages([...AllMessages, ...sentmessage]);
+      setAllMessages([...AllMessages, res.data.newmessage]);
       setsentloading(true);
       setMessages("");
     } catch (error) {
+      toast.error(error.response.data.message);
       console.error(error);
     }
   };
@@ -78,7 +91,7 @@ export function ChatArea() {
           {AllMessages && AllMessages.length > 0 ? (
             AllMessages.map((message) => (
               <div
-                key={message.id}
+                key={message._id}
                 className={
                   message.receiverId === SelectedUserId
                     ? "chat chat-end my-4"
@@ -123,7 +136,7 @@ export function ChatArea() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 w-full flex h-12 items-center outline-none">
+      <div className="fixed bottom-0 w-full max-w-screen flex h-12 items-center outline-none">
         {" "}
         <label className="input w-3/4 input-bordered rounded-none outline-none border-t border-black flex items-center gap-2">
           <input

@@ -17,22 +17,21 @@ export function Signin() {
   const message = useRecoilValue(ResponseMessageSigninAtom);
   return (
     <>
-      <div className="w-full h-screen bg-[url(Al.jpg)]  bg-cover overflow-y-auto grid grid-cols-4 sm:grid-cols-9 font-sans ">
-        <div className="col-span-0 sm:col-span-3 sm:w-full h-screen bg-gray-600 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 overflow-auto"></div>
+      <div className="w-full h-screen bg-[url(Al.jpg)]  bg-cover relative flex gap-6 flex-col justify-center items-center font-sans ">
+      <div className="absolute w-full h-full bg-black/40 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10"></div>
 
-        {/* Main div starts here */}
-
-        <div className="col-span-4 sm:col-span-3 w-full h-screen  flex justify-center items-center  bg-gray-600 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10   ">
-          <div className="w-11/12   bg-gray-800 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 border border-gray-100 ">
+         <div className="z-20 text-3xl font-medium"> <span className="text-4xl">Harmony</span><span className="font-bold  text-[#674940] italic text-4xl">Hub</span></div>
+        <div className=" flex w-full justify-center items-center   rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10   ">
+          <div className="p-5 w-2/5  bg-gray-800 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-40 border border-gray-100 ">
             <div className="text-center pt-6">
-              <p className="text-xl sm:text-3xl text-white font-bold">Signin</p>
-              <p className="text-md sm:text-lg font-regular leading-tight text-gray-300 pt-2">
+              <p className="text-xl sm:text-4xl tracking-wide text-white font-bold">Signin</p>
+              <p className="text-md sm:text-[16px] font-regular leading-tight text-gray-300 pt-2">
                 Enter your credentials to sign in
               </p>
             </div>
             <Email></Email>
             <Password />
-            <div className="ml-6 text-red-500 text-xs font-regular  mt-2">
+            <div className="ml-6 text-red-500 text-sm font-regular  mt-2">
               {message}
             </div>
             <Button></Button>
@@ -41,7 +40,7 @@ export function Signin() {
         </div>
         {/* Main div ends here */}
 
-        <div className="col-span-0 w-full sm:col-span-3 h-screen  bg-gray-600 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 overflow-auto"></div>
+        
       </div>
     </>
   );
@@ -52,7 +51,7 @@ function Email() {
 
   return (
     <div className="mt-2">
-      <p className="pt-2 pb-1 ml-5 font-semibold text-xs text-gray-200 ">
+      <p className="pt-2 pb-1 ml-5 font-semibold text-sm text-gray-200 ">
         Email
       </p>
       <Inputbox
@@ -68,7 +67,7 @@ function Password() {
 
   return (
     <div className="mt-2">
-      <p className="pt-2 pb-1 ml-5 font-semibold text-xs text-gray-200 ">
+      <p className="pt-2 pb-1 ml-5 font-semibold text-sm text-gray-200 ">
         Password
       </p>
       <Inputbox
@@ -135,7 +134,7 @@ function Button() {
   return (
     <div className=" my-2 mt-3 w-full text-center">
       <button
-        className="w-11/12 p-1 py-1.5 text-xs text-white rounded-lg  text-center bg-gray-800 hover:bg-zinc-900"
+        className="w-11/12 p-2 py-2 text-sm text-white rounded-lg  text-center bg-[#161819] hover:bg-zinc-900"
         onClick={handleclick}
       >
         {loading ? (
@@ -160,10 +159,10 @@ function Button() {
 function Footer() {
   return (
     <div className="text-center my-3 ">
-      <div className="text-white text-xs md:text-sm font-regular">
+      <div className="text-white text-sm md:text-sm font-regular">
         Don't have an account?{" "}
         <Link
-          className="bg-blend font-medium underline underline-offset-1 text-gray-800 hover:text-gray-900 "
+          className="bg-blend font-medium underline underline-offset-1 text-blue-500 "
           to={"/signup"}
         >
           Signup

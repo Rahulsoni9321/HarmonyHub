@@ -2,7 +2,8 @@ const express = require("express");
 const { usermiddleware } = require("../middleware/user");
 const { Conversation } = require("../db/conversation");
 const { Message } = require("../db/message");
-// const { getreceiverSocketid, io } = require("../socket");
+const { getreceiverSocketid, io } = require("../socket");
+
 const router = express.Router();
 
 router.post("/send/:userid", usermiddleware, async (req, res) => {
@@ -28,11 +29,11 @@ router.post("/send/:userid", usermiddleware, async (req, res) => {
     }
     await newconversation.save();
     
-    // const ReceiverSocketid=getreceiverSocketid(id);
-    // if (ReceiverSocketid){  
+    const ReceiverSocketid=getreceiverSocketid(id);
+    if (ReceiverSocketid){  
       
-    //   io.to(ReceiverSocketid).emit("newmessages",newmessages)
-    // }
+      io.to(ReceiverSocketid).emit("newmessages",newmessages)
+    }
 
     res.status(200).json({newmessage:newmessages});
   } catch (error) {

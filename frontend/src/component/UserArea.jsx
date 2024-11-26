@@ -7,7 +7,6 @@ export function UserArea({userdetails,loading}) {
       Loading...
     </div>
   }
-      console.log(userdetails);
     return (  <div className="flex items-center justify-between">
 
     <div className="flex items-center gap-2 my-2 mt-4 ml-2">

@@ -142,7 +142,6 @@ router.get("/userprofile", usermiddleware, async (req, res) => {
 router.get("/allusers", usermiddleware, async (req, res) => {
   try {
 
-    console.log("all users")
     const name = req.query.name || "";
 
 

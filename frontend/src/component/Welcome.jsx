@@ -6,8 +6,8 @@ import { useUserDetailsContext } from "../Context/Userdetails";
 export function WelcomeUser() {
     const {userdetails,userloading} =useUserDetailsContext();
     if (userloading){
-        return <div className="w-full h-32 bg-red-300 ">
-                   HEELO loading
+        return <div className="w-full h-full ">
+                   
         </div>
     }
     return <div className="flex items-center justify-center h-screen  rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border-r border-gray-100 ">

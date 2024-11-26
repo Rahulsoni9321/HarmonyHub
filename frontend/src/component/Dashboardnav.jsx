@@ -1,7 +1,10 @@
 import { useSelectedUsercontext } from "../Context/SelectedUser";
+import { useSocketContext } from "../Context/SocketContext";
 
 export function Dashboardnav() {
   const { loading, SelectedUser } = useSelectedUsercontext();
+  const { onlineuser } = useSocketContext();
+
 
   return (
     <div className="w-full overflow-auto">
@@ -11,7 +14,7 @@ export function Dashboardnav() {
             <div className="loading loading-spinner w-6 h-6"></div>
           ) : (
             <>
-              <div className="avatar online placeholder">
+              <div className={onlineuser.includes(SelectedUser._id) === true ? "avatar online placeholder" : "avatar offline placeholder"} >
                 <div className="bg-neutral text-neutral-content rounded-full w-8">
                   <span className="text-lg">
                     <img src={SelectedUser.profilepic} />
